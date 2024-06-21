@@ -37,7 +37,7 @@
 - name: Install the binary ({{ gh_role_installer_repository }})
   when:
     - not ansible_check_mode
-    - latest_release != glab_version_client_installed.stdout 
+    - latest_release != glab_version_client_installed.stdout
   block:
     - name: Create a temporary directory if it does not exist
       ansible.builtin.file:
