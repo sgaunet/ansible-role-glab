@@ -1,0 +1,6 @@
+---
+- name: Install glab
+  hosts: localhost
+  remote_user: root
+  roles:
+    - sgaunet.glab

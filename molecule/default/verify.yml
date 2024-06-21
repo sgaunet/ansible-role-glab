@@ -1,0 +1,17 @@
+---
+# This is an example playbook to execute Ansible tests.
+
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Stat glab
+      ansible.builtin.stat:
+        path: /usr/local/bin/glab
+      register: glab_present
+    - name: Check glab is present
+      ansible.builtin.assert:
+        that:
+          - glab_present.stat.exists
+        fail_msg: "glab not setup"
+        success_msg: "glab is setup"

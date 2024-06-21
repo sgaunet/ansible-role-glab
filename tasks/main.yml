@@ -1,0 +1,83 @@
+---
+
+# request the latest release from the gitlab API
+- name: Retrieve latest release information for github repository {{ gh_role_installer_repository }}
+  ansible.builtin.uri:
+    url: "https://gitlab.com/api/v4/projects/34675721/releases"
+    return_content: true
+  register: project_info
+  changed_when: false
+  check_mode: false
+
+- name: Get the latest release tag
+  ansible.builtin.set_fact:
+    latest_release: "{{ project_info.json | json_query('[0].tag_name') | regex_replace('^v', '') }}"
+  changed_when: false
+  check_mode: false
+
+# - name: Debug latest release tag
+#   ansible.builtin.debug:
+#     var: latest_release
+
+- name: Check glab version
+  become: false
+  ansible.builtin.shell: "set -o pipefail && glab version  | awk '{ print $3 }'"
+  args:
+    executable: /bin/bash
+  register: glab_version_client_installed
+  changed_when: false
+  failed_when: false
+  check_mode: false
+
+# - name: Check glab version # noqa command-instead-of-shell
+#   ansible.builtin.command: '/bin/true'
+#   changed_when: glab_version_client_installed.stdout != glab_version
+#   check_mode: false
+
+- name: Install the binary ({{ gh_role_installer_repository }})
+  when:
+    - not ansible_check_mode
+    - latest_release != glab_version_client_installed.stdout 
+  block:
+    - name: Create a temporary directory if it does not exist
+      ansible.builtin.file:
+        path: "{{ glab_tmp_directory }}/glab/"
+        state: directory
+        mode: '0755'
+
+    - name: Download and unarchive glab
+      ansible.builtin.get_url:
+        url: "https://gitlab.com/gitlab-org/cli/-/releases/v{{ latest_release }}/downloads/glab_{{ latest_release }}_{{ glab_os }}_{{ glab_arch }}.tar.gz"
+        dest: "{{ glab_tmp_directory }}/glab/"
+        mode: "0755"
+
+    - name: Decompress the archive
+      ansible.builtin.unarchive:
+        src: "{{ glab_tmp_directory }}/glab/glab_{{ latest_release }}_{{ glab_os }}_{{ glab_arch }}.tar.gz"
+        dest: "{{ glab_tmp_directory }}/glab/"
+        remote_src: true
+
+    - name: Find and install the binary
+      ansible.builtin.find:
+        paths: "{{ glab_tmp_directory }}/glab/"
+        patterns: "glab"
+        recurse: true
+      register: gh_role_installer_binary
+
+    # - name: Debug gh_role_installer_binary
+    #   ansible.builtin.debug:
+    #     var: gh_role_installer_binary
+
+    - name: Install the binary
+      ansible.builtin.copy:
+        src: "{{ gh_role_installer_binary.files[0].path }}"
+        dest: "{{ glab_bin_path }}"
+        owner: root
+        group: root
+        mode: "0755"
+        remote_src: true
+
+    - name: Remove temporary directory
+      ansible.builtin.file:
+        path: "{{ glab_tmp_directory }}/glab"
+        state: absent
