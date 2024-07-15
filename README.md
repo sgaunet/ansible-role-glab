@@ -1,7 +1,7 @@
 
 # Ansible Role: glab
 
-[![CI](https://github.com/sgaunet/ansible-role-glab/workflows/CI/badge.svg?event=push)](https://github.com/sgaunet/ansible-role-glab/actions?query=workflow%3ACI)
+[![CI](https://github.com/sgaunet/ansible-role-glab/workflows/CI/badge.svg)](https://github.com/sgaunet/ansible-role-glab/actions?query=workflow%3ACI)
 
 An Ansible Role that installs glab on Linux.
 
