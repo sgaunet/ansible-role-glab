@@ -21,7 +21,7 @@
 
 - name: Check glab version
   become: false
-  ansible.builtin.shell: "set -o pipefail && glab version  | awk '{ print $3 }'"
+  ansible.builtin.shell: "set -o pipefail && glab version  | awk '{ print $4 }'"
   args:
     executable: /bin/bash
   register: glab_version_client_installed
