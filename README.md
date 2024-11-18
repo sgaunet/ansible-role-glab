@@ -1,7 +1,8 @@
+[![GitHub release](https://img.shields.io/github/release/sgaunet/ansible-role-glab.svg)](https://github.com/sgaunet/ansible-role-glab/releases/latest)
+[![CI](https://github.com/sgaunet/ansible-role-glab/workflows/CI/badge.svg)](https://github.com/sgaunet/ansible-role-glab/actions?query=workflow%3ACI)
+[![License](https://img.shields.io/github/license/sgaunet/ansible-role-glab.svg)](LICENSE)
 
 # Ansible Role: glab
-
-[![CI](https://github.com/sgaunet/ansible-role-glab/workflows/CI/badge.svg)](https://github.com/sgaunet/ansible-role-glab/actions?query=workflow%3ACI)
 
 An Ansible Role that installs glab on Linux.
 
