@@ -38,3 +38,18 @@ jobs:
         run: >-
           ansible-galaxy role import --api-key ${{ secrets.GALAXY_API_KEY }} \
             $(echo ${{ github.repository }} | cut -d/ -f1) $(echo ${{ github.repository }} | cut -d/ -f2)
+
+  gh-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Build
+        run: echo ${{ github.sha }} > Release.txt
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            README.md
+            LICENSE
