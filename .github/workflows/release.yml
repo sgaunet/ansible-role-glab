@@ -11,6 +11,9 @@ name: Release
     tags:
       - '*'
 
+permissions:
+  contents: write
+
 defaults:
   run:
     working-directory: 'sgaunet.glab'
