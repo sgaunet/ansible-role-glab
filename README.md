@@ -4,7 +4,7 @@
 
 # Ansible Role: glab
 
-An Ansible Role that installs glab on Linux.
+An Ansible Role that installs [glab](https://docs.gitlab.com/ee/editor_extensions/gitlab_cli/) on Linux.
 
 ## Requirements
 
@@ -29,6 +29,18 @@ None.
 - hosts: all
   roles:
     - sgaunet.glab
+```
+
+## Development
+
+### Testing
+
+This role is tested with [Molecule](https://molecule.readthedocs.io/).
+
+To run the tests, you need to have [devbox](https://www.jetify.com/devbox) installed on your machine.
+
+```bash
+devbox run test
 ```
 
 ## License
