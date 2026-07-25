@@ -1,10 +1,27 @@
 ---
-name: CI-goreleaser
+name: CI
 'on':
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
   schedule:
     - cron: "42 16 * * 2"
 
 jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the codebase.
+        uses: actions/checkout@v4
+
+      - name: Install mise
+        uses: jdx/mise-action@v4
+
+      - name: Run ansible-lint.
+        run: mise run lint
+
   molecule:
     name: Molecule
     runs-on: ubuntu-latest
@@ -18,12 +35,11 @@ jobs:
       - name: Check out the codebase.
         uses: actions/checkout@v4
 
-      - name: Install devbox
-        uses: jetify-com/devbox-install-action@v0.11.0
+      - name: Install mise
+        uses: jdx/mise-action@v4
 
       - name: Run Molecule tests.
-        run: |
-          devbox run -- molecule test
+        run: mise run molecule-test
         env:
           PY_COLORS: '1'
           ANSIBLE_FORCE_COLOR: '1'

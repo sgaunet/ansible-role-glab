@@ -37,10 +37,12 @@ None.
 
 This role is tested with [Molecule](https://molecule.readthedocs.io/).
 
-To run the tests, you need to have [devbox](https://www.jetify.com/devbox) installed on your machine.
+To run the tests, you need [mise](https://mise.jdx.dev/) installed on your machine and a running Docker daemon.
 
 ```bash
-devbox run test
+mise install           # python, uv, task
+mise run lint          # ansible-lint
+mise run molecule-test # molecule test
 ```
 
 ## License
